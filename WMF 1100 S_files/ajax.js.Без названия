@@ -1,0 +1,121 @@
+$(function () {
+    $(document).on("input blur focus", ".input-tel, [data-phone-pattern]", (e) => {
+        var el = e.target,
+            clearVal = $(el).data('phoneClear'),
+            pattern = $(el).data('phonePattern'),
+            matrix_def = "+7(___) ___-__-__",
+            matrix = pattern ? pattern : matrix_def,
+            i = 0,
+            def = matrix.replace(/\D/g, ""),
+            val = $(el).val().replace(/\D/g, "");
+        if (clearVal !== 'false' && e.type === 'blur') {
+            if (val.length < matrix.match(/([\_\d])/g).length) {
+                $(el).val('');
+                return;
+            }
+        }
+        if (def.length >= val.length) val = def;
+        $(el).val(matrix.replace(/./g, function (a) {
+            return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? "" : a;
+        }));
+    });
+});
+
+function changeCity(post, devAddress) {
+    BX.ajax.post(
+        '/ajax/getCityInfo.php',
+        post,
+        function (data) {
+            let report = JSON.parse(data);
+            if (report.res) {
+                devAddress.innerHTML = report.res;
+            }
+        }
+    );
+}
+
+if (document.querySelector('.selectpicker')) {
+    let selectCity = document.querySelector('.selectpicker');
+    let devAddress = document.getElementById('ajax-address');
+    selectCity.addEventListener('change', function (e) {
+        let post = {};
+        post['city_code'] = selectCity.selectedOptions[0].value;
+        post['city_name'] = selectCity.selectedOptions[0].text;
+
+        changeCity(post, devAddress)
+    });
+    BX.ready(function () {
+        let event = new Event('change');
+        selectCity.dispatchEvent(event);
+    });
+}
+
+function openContactModal() {
+    $(document).on("click", ".open-modal", function (e) {
+        e.preventDefault();
+        var this_ = $(this);
+        if (this_.hasClass("disabled")) {
+            return false;
+        }
+        this_.addClass("disabled");
+        $.ajax({
+            url: "/ajax/feedback_modal.php",
+            type: "POST",
+            data: {},
+            success: function (data) {
+                $('#feedbackModal_').html(data);
+                $('#feedback-modal_').trigger('click');
+                this_.removeClass("disabled");
+            }
+        });
+    });
+    $('#feedbackModal_').on('hidden.bs.modal', function (e) {
+        $(this).html('');
+    });
+}
+
+function openSideBar() {
+    $(document).on("click", ".main-sidebar", function (e) {
+        e.preventDefault();
+        if ($(this).hasClass('click')) {
+
+            if (!$(this).hasClass('success')) {
+                $(this).addClass('success');
+
+                $.ajax({
+                    url: "/ajax/sidebar.php",
+                    type: "POST",
+                    data: {},
+                    success: function (data) {
+                        $('#sidebar-forms').html(data);
+                    }
+                });
+            }
+        }
+    });
+}
+
+$(document).ready(function () {
+    initSwiper();
+    openContactModal();
+    openSideBar();
+});
+
+BX.addCustomEvent('onAjaxSuccess', function () {
+    $(document).ready(function () {
+        
+        divFromTable();
+        divFromTableWmf();
+        
+        initSwiper();
+        tabsForSpecifications();
+        
+        $('.popup-youtube').magnificPopup({		
+			type: 'iframe',
+			mainClass: 'mfp-fade',
+			removalDelay: 160,
+			preloader: false,
+			fixedContentPos: false
+		});
+    });
+});

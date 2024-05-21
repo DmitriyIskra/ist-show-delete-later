@@ -1,0 +1,37 @@
+@font-face {
+    font-family: WMFR;
+    src: url("fonts/WMFRotis/WMFRotis-LightItalic.woff2");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;  
+}
+@font-face {
+    font-family: WMFR;
+    src: url("fonts/WMFRotis/WMFRotis-Light.woff2");
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;    
+}
+@font-face {
+    font-family: WMFR;
+    src: url("fonts/WMFRotis/WMFRotis-Regular.woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: WMFR;
+    src: url("fonts/WMFRotis/WMFRotis-Medium.woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;  
+}
+@font-face {
+    font-family: WMFR;
+    src: url("fonts/WMFRotis/WMFRotis-Bold.woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;   
+}
+
+
